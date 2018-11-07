@@ -4,10 +4,8 @@ import com.carbcrest.carbc.Entities.BlockInfo;
 import com.carbcrest.carbc.Entities.Identity;
 import com.carbcrest.carbc.Entities.PeerDetails;
 import com.carbcrest.carbc.Repositories.BlockInfoRepository;
-import com.carbcrest.carbc.Services.BlockInfoService;
-import com.carbcrest.carbc.Services.CommonService;
-import com.carbcrest.carbc.Services.IdentityService;
-import com.carbcrest.carbc.Services.PeerDetailsService;
+import com.carbcrest.carbc.Repositories.HistoryRepository;
+import com.carbcrest.carbc.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +27,9 @@ public class Controller {
 
     @Autowired
     PeerDetailsService peerDetailsService;
+
+    @Autowired
+    HistoryService historyService;
 
     @RequestMapping
     public String weclome() {
@@ -86,7 +87,7 @@ public class Controller {
     }
 
 
-    @RequestMapping(value = "/insertidentity", method = RequestMethod.POST)
+    @RequestMapping(value = "/insertidentity", method = RequestMethod.GET)
     public void insertIdentity(@RequestParam("block_hash") String block_hash,
                                @RequestParam("public_key") String public_key,
                                @RequestParam("role") String role,
@@ -111,7 +112,7 @@ public class Controller {
     }
 
 
-    @RequestMapping(value = "/insertpeerdetails", method = RequestMethod.POST)
+    @RequestMapping(value = "/insertpeerdetails", method = RequestMethod.GET)
     public void insertPeerDetails(@RequestParam("node_id") String node_id,
                                   @RequestParam("ip") String ip,
                                   @RequestParam("port") String port,
@@ -130,7 +131,7 @@ public class Controller {
         return peerDetailsService.getPeers();
     }
 
-    @RequestMapping(value = "/updatepeerdetails", method = RequestMethod.POST)
+    @RequestMapping(value = "/updatepeerdetails", method = RequestMethod.GET)
     public void updatePeerDetails(@RequestParam("node_id") String node_id,
                                   @RequestParam("ip") String ip,
                                   @RequestParam("port") String port,
@@ -138,4 +139,32 @@ public class Controller {
         peerDetailsService.insertPeerDetails(node_id, ip, port, public_key);
     }
 
+
+    @RequestMapping(value = "/inserthistory", method = RequestMethod.GET)
+    public void insertHistory(
+            @RequestParam("previous_hash") String previous_hash,
+            @RequestParam("block_hash") String block_hash,
+            @RequestParam("block_timestamp") String block_timestamp,
+            @RequestParam("block_number") String block_number,
+            @RequestParam("validity") String validity,
+            @RequestParam("transaction_id") String transaction_id,
+            @RequestParam("sender") String sender,
+            @RequestParam("event") String event,
+            @RequestParam("data") String data,
+            @RequestParam("address") String address) {
+
+        historyService.insertHistory(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address);
+
+    }
+
+
+    @RequestMapping(value = "/findhistoryadditionaldata", method = RequestMethod.GET)
+    public HistoryRepository.HistoryAdditionalData findAdditionalData(@RequestParam("block_hash") String block_hash) {
+        return historyService.findAdditionalData(block_hash);
+    }
+
+    @RequestMapping(value = "/findhistorymetainfo", method = RequestMethod.GET)
+    public HistoryRepository.HistoryMetaInfo findHistoryMetaInfo(@RequestParam("block_hash") String block_hash) {
+        return historyService.findMetaInfo(block_hash);
+    }
 }
