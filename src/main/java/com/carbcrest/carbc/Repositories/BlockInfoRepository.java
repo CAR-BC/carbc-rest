@@ -1,12 +1,25 @@
 package com.carbcrest.carbc.Repositories;
 
 import com.carbcrest.carbc.Entities.BlockInfo;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface BlockInfoRepository extends CrudRepository<BlockInfo, Integer> {
+    @Modifying
+    @Query(value = "INSERT INTO Blockchain(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address)  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)", nativeQuery = true)
+    @Transactional
+    void saveInBlockchain(String previous_hash,String block_hash,String block_timestamp,String block_number,String validity,String transaction_id,String sender,String event,String data,String address);
+
+//    @Modifying
+//    @Query(value = "insert into Logger (redirect,user_id) VALUES (:insertLink,:id)", nativeQuery = true)
+//    @Transactional
+//    void logURI(@Param("insertLink") String insertLink, @Param("id") Long id);
+
+
 
     @Query(value = "SELECT * FROM Blockchain WHERE block_number >= ?1 AND validity = 1", nativeQuery = true)
     List<BlockInfo> findByBlockNumber(int block_number);

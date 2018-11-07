@@ -67,9 +67,21 @@ public class Controller {
         return blockInfoService.getEventData(block_hash);
     }
 
-    @RequestMapping(value = "/insertblock", method = RequestMethod.POST)
-    public boolean insertBlock(@RequestBody BlockInfo blockInfo){
-        return blockInfoService.insertBlockInfo(blockInfo);
+    @RequestMapping(value = "/insertblock", method = RequestMethod.GET)
+    public void insertBlock(
+            @RequestParam("previous_hash") String  previous_hash,
+            @RequestParam("block_hash") String  block_hash,
+            @RequestParam("block_timestamp") String  block_timestamp,
+            @RequestParam("block_number") String  block_number,
+            @RequestParam("validity") String  validity,
+            @RequestParam("transaction_id") String  transaction_id,
+            @RequestParam("sender") String  sender,
+            @RequestParam("event") String  event,
+            @RequestParam("data") String  data,
+            @RequestParam("address") String  address){
+
+        blockInfoService.insertBlockInfo(previous_hash,block_hash,block_timestamp,block_number,validity,transaction_id,sender,event,data,address);
+
     }
 
 

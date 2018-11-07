@@ -14,12 +14,9 @@ public class BlockInfoServiceImpl implements BlockInfoService{
     BlockInfoRepository blockInfoRepository;
 
     @Override
-    public boolean insertBlockInfo(BlockInfo blockInfo) {
-        BlockInfo saved = blockInfoRepository.save(blockInfo);
-        if (saved == null){
-            return false;
-        }
-        return true;
+    public void insertBlockInfo(String previous_hash, String block_hash, String block_timestamp, String block_number, String validity, String transaction_id, String sender, String event, String data, String address) {
+        blockInfoRepository.saveInBlockchain(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address);
+        return;
     }
 
     @Override
