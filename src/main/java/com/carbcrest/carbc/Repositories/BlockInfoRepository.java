@@ -14,12 +14,6 @@ public interface BlockInfoRepository extends CrudRepository<BlockInfo, Integer> 
     @Transactional
     void saveInBlockchain(String previous_hash,String block_hash,String block_timestamp,String block_number,String validity,String transaction_id,String sender,String event,String data,String address);
 
-//    @Modifying
-//    @Query(value = "insert into Logger (redirect,user_id) VALUES (:insertLink,:id)", nativeQuery = true)
-//    @Transactional
-//    void logURI(@Param("insertLink") String insertLink, @Param("id") Long id);
-
-
 
     @Query(value = "SELECT * FROM Blockchain WHERE block_number >= ?1 AND validity = 1", nativeQuery = true)
     List<BlockInfo> findByBlockNumber(int block_number);

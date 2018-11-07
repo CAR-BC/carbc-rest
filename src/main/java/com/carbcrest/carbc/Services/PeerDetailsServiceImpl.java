@@ -14,14 +14,6 @@ public class PeerDetailsServiceImpl implements PeerDetailsService {
     @Autowired
     PeerDetailsRepository peerDetailsRepository;
 
-    @Override
-    public boolean insertPeerDetails(PeerDetails peerDetails) {
-        PeerDetails saved = peerDetailsRepository.save(peerDetails);
-        if (saved == null){
-            return false;
-        }
-        return true;
-    }
 
 //    @Override
 //    public PeerDetails getPeerDetails(String publicKey) {
@@ -37,6 +29,11 @@ public class PeerDetailsServiceImpl implements PeerDetailsService {
 //    public PeerDetails getPeersByLocation(String location) {
 //        return null;
 //    }
+
+    @Override
+    public void insertPeerDetails(String node_id, String ip, String port, String public_key) {
+        peerDetailsRepository.saveInPeerDetails(node_id,ip,port,public_key);
+    }
 
     @Override
     public PeerDetails getPeer(String node_id) {

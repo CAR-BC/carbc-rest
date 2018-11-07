@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public interface PeerDetailsService {
 
-    public boolean insertPeerDetails(PeerDetails peerDetails);
+    public void insertPeerDetails(String node_id, String ip,String port,String public_key);
 //    public PeerDetails getPeerDetails(String publicKey);
 //    public PeerDetails getPeerPublicKey(String peerID);
 //    public PeerDetails getPeersByLocation(String location);
