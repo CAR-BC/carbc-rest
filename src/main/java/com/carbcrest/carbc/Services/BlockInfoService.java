@@ -11,7 +11,7 @@ public interface BlockInfoService {
     public List<BlockInfo> getVehicleDetails(String transaction_id, String event, String address);
 
     public int getRecentBlockNumber();
-    public String getPreviousHash();
+    public BlockInfoRepository.PreviousHash getPreviousHash();
 
     public BlockInfoRepository.BlockMetaInfo getMetaInfo();
     public BlockInfoRepository.BlockEventData getEventData(String blockHash);

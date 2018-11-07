@@ -22,8 +22,12 @@ public interface PeerDetailsRepository extends CrudRepository<PeerDetails, Integ
 
 
 //
-    @Query(value = "UPDATE PeerDetails SET ip = ?1, port = ?2 WHERE  node_id = ?3;", nativeQuery = true)
+    @Query(value = "UPDATE PeerDetails SET ip = ?1, port = ?2 WHERE  node_id = ?3", nativeQuery = true)
     List<PeerDetails> updatePeer(String ip, int port, String node_id);
+
+
+    @Query(value = "SELECT * FROM PeerDetails", nativeQuery = true)
+    List<PeerDetails> getAllPeer();
 
 //    @Query(value = "SELECT * FROM PeerDetails WHERE role= ?1", nativeQuery = true)
 //    List<PeerDetails> findByNodeID(String address);

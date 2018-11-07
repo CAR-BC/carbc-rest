@@ -43,8 +43,8 @@ public class PeerDetailsServiceImpl implements PeerDetailsService {
 
     @Override
     public ArrayList<PeerDetails> getPeers() {
-        Iterable<PeerDetails> peerDetailsList = peerDetailsRepository.findAll();
-        return null;
+        ArrayList<PeerDetails> peerDetailsList = (ArrayList<PeerDetails>) peerDetailsRepository.getAllPeer();
+        return peerDetailsList;
     }
 
     @Override

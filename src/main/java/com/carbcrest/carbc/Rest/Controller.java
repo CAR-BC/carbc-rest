@@ -52,7 +52,7 @@ public class Controller {
     }
 
     @RequestMapping(value = "/findprevioushash", method = RequestMethod.GET)
-    public String findPreviousHash() {
+    public BlockInfoRepository.PreviousHash findPreviousHash() {
         return blockInfoService.getPreviousHash();
     }
 
@@ -62,6 +62,7 @@ public class Controller {
         return blockInfoService.getMetaInfo();
     }
 
+    //not using in android
     @RequestMapping(value = "/findeventdata", method = RequestMethod.GET)
     public BlockInfoRepository.BlockEventData findEventData(@RequestParam("block_hash") String block_hash) {
         return blockInfoService.getEventData(block_hash);

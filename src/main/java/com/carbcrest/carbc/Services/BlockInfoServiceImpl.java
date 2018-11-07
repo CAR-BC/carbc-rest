@@ -39,8 +39,8 @@ public class BlockInfoServiceImpl implements BlockInfoService{
     }
 
     @Override
-    public String getPreviousHash() {
-        String previousHash = blockInfoRepository.findPreviousHash().getPreviousHash();
+    public BlockInfoRepository.PreviousHash getPreviousHash() {
+        BlockInfoRepository.PreviousHash previousHash = blockInfoRepository.findPreviousHash();
         return previousHash;
     }
 

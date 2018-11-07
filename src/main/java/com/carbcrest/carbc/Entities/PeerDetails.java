@@ -11,18 +11,18 @@ import javax.persistence.Table;
 
 public class PeerDetails {
     @Id
-    private String peerID;
+    private String node_id;
     private String ip;
     private int port;
-    private String publicKey;
+    private String public_key;
 
 
-    public String getPeerID() {
-        return peerID;
+    public String getnode_id() {
+        return node_id;
     }
 
-    public void setPeerID(String peerID) {
-        this.peerID = peerID;
+    public void setnode_id(String node_id) {
+        this.node_id = node_id;
     }
 
     public String getIp() {
@@ -41,11 +41,11 @@ public class PeerDetails {
         this.port = port;
     }
 
-    public String getPublicKey() {
-        return publicKey;
+    public String getpublic_key() {
+        return public_key;
     }
 
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
+    public void setpublic_key(String public_key) {
+        this.public_key = public_key;
     }
 }
