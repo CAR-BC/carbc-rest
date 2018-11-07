@@ -13,13 +13,10 @@ public class IdentityServiceImpl implements IdentityService {
     private
     IdentityRepository identityRepository;
 
+
     @Override
-    public boolean insertIdentity(Identity identity) {
-        Identity saved = identityRepository.save(identity);
-        if (saved == null){
-            return false;
-        }
-        return true;
+    public void insertIdentity(String block_hash, String public_key, String role, String name, String location) {
+        identityRepository.saveInIdentity(block_hash,public_key,role,name,location);
     }
 
     @Override
