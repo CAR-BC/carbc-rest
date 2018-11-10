@@ -30,4 +30,13 @@ public interface HistoryRepository  extends CrudRepository<BlockInfo, Integer> {
         String getAdditionalData();
     }
 
+    @Modifying
+    @Query(value = "UPDATE `History` SET `validity` = 1 WHERE `block_hash` = ?1", nativeQuery = true)
+    @Transactional
+    void setValidity(String blockHash);
+
+
+    @Query(value = "SELECT EXISTS(SELECT * FROM History WHERE `block_hash` = ?1 AND `validity` = 0)", nativeQuery = true)
+    int checkExistence(String blockHash);
+
 }

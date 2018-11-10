@@ -23,4 +23,15 @@ public class VehicleServiceImpl implements VehicleService{
         }
         return vehicleList;
     }
+
+    @Override
+    public void insertIntoVehicleTable(String registrationNumber, String vehicleId, String currentOwner) {
+        vehicleRepository.insertIntoVehicleTable(registrationNumber, vehicleId, currentOwner);
+    }
+
+    @Override
+    public void updateVehicleTable(String vehicleId, String currentOwner) {
+        vehicleRepository.updateVehicleTable(currentOwner, vehicleId);
+    }
+
 }

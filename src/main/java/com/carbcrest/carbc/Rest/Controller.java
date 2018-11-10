@@ -131,6 +131,8 @@ public class Controller {
         System.out.println("*********************************Registration Data*********************************");
 
         BlockInfoRepository.RegisterData registrationData = blockInfoService.getRegistrationData(registration_number);
+        System.out.println(registration_number);
+
         JSONArray response = new JSONArray();
 
         if (registrationData==null){
@@ -167,7 +169,7 @@ public class Controller {
 
     //checked
     @RequestMapping(value = "/insertblock", method = RequestMethod.GET)
-    public void insertBlock(
+    public JSONArray insertBlock(
             @RequestParam("previous_hash") String previous_hash,
             @RequestParam("block_hash") String block_hash,
             @RequestParam("block_timestamp") String block_timestamp,
@@ -180,17 +182,33 @@ public class Controller {
             @RequestParam("address") String address,
             @RequestParam("rating") String rating) {
 
+
         blockInfoService.insertBlockInfo(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address, rating);
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
+        response.put(res);
+
+        return response;
     }
 
 
     @RequestMapping(value = "/insertidentity", method = RequestMethod.GET)
-    public void insertIdentity(@RequestParam("block_hash") String block_hash,
+    public JSONArray insertIdentity(@RequestParam("block_hash") String block_hash,
                                @RequestParam("public_key") String public_key,
                                @RequestParam("role") String role,
                                @RequestParam("name") String name,
                                @RequestParam("location") String location) {
         identityService.insertIdentity(block_hash, public_key, role, name, location);
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
+        response.put(res);
+        return response;
     }
 
     //checked
@@ -263,12 +281,20 @@ public class Controller {
 
 
     @RequestMapping(value = "/insertpeerdetails", method = RequestMethod.GET)
-    public void insertPeerDetails(@RequestParam("node_id") String node_id,
+    public JSONArray insertPeerDetails(@RequestParam("node_id") String node_id,
                                   @RequestParam("ip") String ip,
                                   @RequestParam("port") String port,
                                   @RequestParam("public_key") String public_key) {
         peerDetailsService.insertPeerDetails(node_id, ip, port, public_key);
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
+        response.put(res);
+        return response;
     }
+
 
     @RequestMapping(value = "/findpeer", method = RequestMethod.GET)
     public JSONArray findPeer(@RequestParam("node_id") String node_id) {
@@ -382,12 +408,15 @@ public class Controller {
     }
 
     //checked
-    @RequestMapping(value = "/findmyvehicenumbers", method = RequestMethod.GET)
+    @RequestMapping(value = "/findmyvehiclenumbers", method = RequestMethod.GET)
     public JSONArray findMyVehicleNumbers(@RequestParam("current_owner") String current_owner) {
         ArrayList<String> myVehicleList = vehicleService.getMyVehicleList(current_owner);
 
         JSONArray response = new JSONArray();
         JSONArray res = new JSONArray();
+        for(String s: myVehicleList) {
+            System.out.println(s);
+        }
 
         if (myVehicleList.size()>0){
             response.put(true);
@@ -397,6 +426,63 @@ public class Controller {
         }else{
             response.put(false);
         }
+        response.put(res);
+        return response;
+    }
+
+    @RequestMapping(value = "/insertintovehicle", method = RequestMethod.GET)
+    public JSONArray insertIntoVehicle(@RequestParam("registration_number") String registration_number,
+                                  @RequestParam("vehicle_id") String vehicle_id,
+                                  @RequestParam("current_owner") String current_owner ){
+        System.out.println("recieved");
+        vehicleService.insertIntoVehicleTable(registration_number, vehicle_id, current_owner);
+
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
+        response.put(res);
+        return response;
+    }
+
+    @RequestMapping(value = "/updatevehicle", method = RequestMethod.GET)
+    public JSONArray updateVehicle(@RequestParam("vehicle_id") String vehicle_id,
+                                  @RequestParam("current_owner") String current_owner ){
+        vehicleService.updateVehicleTable(vehicle_id, current_owner);
+
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
+        response.put(res);
+        return response;
+    }
+
+    @RequestMapping(value = "/setvalidity", method = RequestMethod.GET)
+    public JSONArray setValidity(@RequestParam("block_hash") String block_hash){
+        historyService.setValidity(block_hash);
+
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
+        response.put(res);
+        return response;
+    }
+
+    @RequestMapping(value = "/checkexistence", method = RequestMethod.GET)
+    public JSONArray checkExistence(@RequestParam("block_hash") String block_hash){
+        int existenceInfo = historyService.checkExistence(block_hash);
+
+        System.out.println(existenceInfo);
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put(existenceInfo);
         response.put(res);
         return response;
     }

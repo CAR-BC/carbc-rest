@@ -25,4 +25,14 @@ public class HistoryServiceImpl implements HistoryService {
     public HistoryRepository.HistoryAdditionalData findAdditionalData(String block_hash) {
         return historyRepository.findAdditionalData(block_hash);
     }
+
+    @Override
+    public void setValidity(String blockHash) {
+        historyRepository.setValidity(blockHash);
+    }
+
+    @Override
+    public int checkExistence(String blockHash) {
+        return historyRepository.checkExistence(blockHash);
+    }
 }
