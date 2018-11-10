@@ -6,10 +6,13 @@ import com.carbcrest.carbc.Entities.PeerDetails;
 import com.carbcrest.carbc.Repositories.BlockInfoRepository;
 import com.carbcrest.carbc.Repositories.HistoryRepository;
 import com.carbcrest.carbc.Services.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -31,36 +34,79 @@ public class Controller {
     @Autowired
     HistoryService historyService;
 
+    @Autowired
+    VehicleService vehicleService;
+
     @RequestMapping
     public String weclome() {
         return "Hi Welocome!";
     }
 
-    @RequestMapping(value = "/blockinfo", method = RequestMethod.GET)
-    public List<BlockInfo> findByBlockNumber(@RequestParam("block_number") int block_number) {
-        return blockInfoService.getBlockInfo(block_number);
-    }
+//    @RequestMapping(value = "/blockinfo", method = RequestMethod.GET)
+//    public List<BlockInfo> findByBlockNumber(@RequestParam("block_number") int block_number) {
+//        return blockInfoService.getBlockInfo(block_number);
+//    }
 
+
+    //checked
     @RequestMapping(value = "/vehicleinfo", method = RequestMethod.GET)
-    public List<BlockInfo> findVehicleDetails(@RequestParam("transaction_id") String transaction_id,
-                                              @RequestParam("event") String event, @RequestParam("address") String address) {
-        return blockInfoService.getVehicleDetails(transaction_id, event, address);
+    public JSONArray findVehicleDetails(@RequestParam("event") String event, @RequestParam("address") String address) {
+
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        List<BlockInfo> a = blockInfoService.getVehicleDetails(event, address);
+        for (int i = 0; i < a.size(); i++){
+            res.put(a.get(i));
+        }
+        response.put(res);
+
+        return response;
     }
 
+
+    //checked
     @RequestMapping(value = "/findRecentblocknumber", method = RequestMethod.GET)
-    public int findRecentBlockNumber() {
-        return blockInfoService.getRecentBlockNumber();
+    public JSONArray findRecentBlockNumber() {
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put(blockInfoService.getRecentBlockNumber());
+        response.put(res);
+        return response;
     }
 
+    //checked
     @RequestMapping(value = "/findprevioushash", method = RequestMethod.GET)
-    public BlockInfoRepository.PreviousHash findPreviousHash() {
-        return blockInfoService.getPreviousHash();
+    public JSONArray findPreviousHash() {
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put(blockInfoService.getPreviousHash());
+        response.put(res);
+        return response;
     }
 
 
+    //checked
     @RequestMapping(value = "/blockmetainfo", method = RequestMethod.GET)
-    public BlockInfoRepository.BlockMetaInfo findMetaInfo() {
-        return blockInfoService.getMetaInfo();
+    public JSONArray findMetaInfo() {
+        BlockInfoRepository.BlockMetaInfo metaInfo = blockInfoService.getMetaInfo();
+        JSONArray response = new JSONArray();
+
+        if (metaInfo==null){
+            response.put(false);
+        }else{
+            response.put(true);
+        }
+
+        JSONArray res = new JSONArray();
+        res.put(metaInfo);
+        response.put(res);
+        return response;
     }
 
     //not using in android
@@ -69,6 +115,57 @@ public class Controller {
         return blockInfoService.getEventData(block_hash);
     }
 
+//    //checked
+//    @RequestMapping(value = "/searchvehicleregistrationdata", method = RequestMethod.GET)
+//    public JSONArray findVehicleRegistrationData(@RequestParam("registration_number") String registration_number) {
+//        BlockInfoRepository.RegisterData registrationData = blockInfoService.getRegistrationData(registration_number);
+//        JSONArray array = new JSONArray();
+//        array.put(registrationData);
+//        System.out.println("*********************************Registration Data*********************************");
+//        return array;
+//    }
+
+    //checked
+    @RequestMapping(value = "/searchvehicleregistrationdata", method = RequestMethod.GET)
+    public JSONArray findVehicleRegistrationData(@RequestParam("registration_number") String registration_number) {
+        System.out.println("*********************************Registration Data*********************************");
+
+        BlockInfoRepository.RegisterData registrationData = blockInfoService.getRegistrationData(registration_number);
+        JSONArray response = new JSONArray();
+
+        if (registrationData==null){
+            response.put(false);
+        }else{
+            response.put(true);
+        }
+
+        JSONArray res = new JSONArray();
+        res.put(registrationData);
+        response.put(res);
+        return response;
+    }
+
+    //checked
+    @RequestMapping(value = "/searchvehicledata", method = RequestMethod.GET)
+    public JSONArray findVehicleData(@RequestParam("registration_number") String registration_number) {
+        System.out.println("******************************hello*********************************************");
+        BlockInfoRepository.VehicleData vehicleData = blockInfoService.getVehicleData(registration_number);
+        JSONArray response = new JSONArray();
+
+        if (vehicleData==null){
+            response.put(false);
+        }else{
+            response.put(true);
+        }
+
+        JSONArray res = new JSONArray();
+        res.put(vehicleData);
+        response.put(res);
+        return response;
+
+    }
+
+    //checked
     @RequestMapping(value = "/insertblock", method = RequestMethod.GET)
     public void insertBlock(
             @RequestParam("previous_hash") String previous_hash,
@@ -80,10 +177,10 @@ public class Controller {
             @RequestParam("sender") String sender,
             @RequestParam("event") String event,
             @RequestParam("data") String data,
-            @RequestParam("address") String address) {
+            @RequestParam("address") String address,
+            @RequestParam("rating") String rating) {
 
-        blockInfoService.insertBlockInfo(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address);
-
+        blockInfoService.insertBlockInfo(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address, rating);
     }
 
 
@@ -96,19 +193,72 @@ public class Controller {
         identityService.insertIdentity(block_hash, public_key, role, name, location);
     }
 
+    //checked
     @RequestMapping(value = "/findidentity", method = RequestMethod.GET)
-    public Identity findIdentity(@RequestParam("publicKey") String publicKey) {
-        return identityService.getIdentity(publicKey);
+    public JSONArray findIdentity(@RequestParam("publicKey") String publicKey) {
+        Identity identity= identityService.getIdentity(publicKey);
+        JSONArray response = new JSONArray();
+
+        if (identity==null){
+            response.put(false);
+        }else{
+            response.put(true);
+        }
+
+        JSONArray res = new JSONArray();
+        res.put(identity);
+        response.put(res);
+        return response;
     }
 
     @RequestMapping(value = "/findidentitybyaddress", method = RequestMethod.GET)
-    public List<Identity> findIdentityByAdsress(@RequestParam("address") String address) {
-        return identityService.getIdentityByAddress(address);
+    public JSONArray findIdentityByAdsress(@RequestParam("address") String address) {
+        List<Identity> identityArray = identityService.getIdentityByAddress(address);
+        JSONArray response = new JSONArray();
+        JSONArray res = new JSONArray();
+
+        if (identityArray.size()>0){
+            response.put(true);
+        }else{
+            response.put(false);
+        }
+
+        for (int i = 0; i < identityArray.size(); i++){
+            res.put(identityArray.get(i));
+        }
+        response.put(res);
+
+        return response;
     }
 
+//    @RequestMapping(value = "/findidentitybyaddress", method = RequestMethod.GET)
+//    public List<Identity> findIdentityByAdsress(@RequestParam("address") String address) {
+//        return identityService.getIdentityByAddress(address);
+//    }
+
+//    @RequestMapping(value = "/findidentitybyrole", method = RequestMethod.GET)
+//    public JSONArray findIdentitybyRole(@RequestParam("role") String role) {
+//        JSONArray res = new JSONArray();
+//        res.put(identityService.getIdentityByRole(role));
+//
+//        return res;
+//    }
+
     @RequestMapping(value = "/findidentitybyrole", method = RequestMethod.GET)
-    public Identity findIdentitybyRole(@RequestParam("role") String role) {
-        return identityService.getIdentityByRole(role);
+    public JSONArray findIdentitybyRole1(@RequestParam("role") String role) {
+        Identity identity = identityService.getIdentityByRole(role);
+        JSONArray response = new JSONArray();
+
+        if (identity==null){
+            response.put(false);
+        }else{
+            response.put(true);
+        }
+
+        JSONArray res = new JSONArray();
+        res.put(identity);
+        response.put(res);
+        return response;
     }
 
 
@@ -121,14 +271,43 @@ public class Controller {
     }
 
     @RequestMapping(value = "/findpeer", method = RequestMethod.GET)
-    public PeerDetails findPeer(@RequestParam("node_id") String node_id) {
-        return peerDetailsService.getPeer(node_id);
+    public JSONArray findPeer(@RequestParam("node_id") String node_id) {
+        PeerDetails peerDetails = peerDetailsService.getPeer(node_id);
+        JSONArray response = new JSONArray();
+
+        if (peerDetails==null){
+            response.put(false);
+        }else{
+            response.put(true);
+        }
+
+        JSONArray res = new JSONArray();
+        res.put(peerDetails);
+        response.put(res);
+        return response;
     }
 
 
+    //checked
     @RequestMapping(value = "/findallpeers", method = RequestMethod.GET)
-    public ArrayList<PeerDetails> findAllPeers() {
-        return peerDetailsService.getPeers();
+    public JSONArray findAllPeers() {
+        ArrayList<PeerDetails> peerDetails = peerDetailsService.getPeers();
+
+        JSONArray response = new JSONArray();
+        JSONArray res = new JSONArray();
+
+        if (peerDetails.size()>0){
+            response.put(true);
+            for (int i = 0; i < peerDetails.size(); i++){
+                res.put(peerDetails.get(i));
+            }
+        }else{
+            response.put(false);
+        }
+        response.put(res);
+
+        return response;
+
     }
 
     @RequestMapping(value = "/updatepeerdetails", method = RequestMethod.GET)
@@ -141,7 +320,7 @@ public class Controller {
 
 
     @RequestMapping(value = "/inserthistory", method = RequestMethod.GET)
-    public void insertHistory(
+    public JSONArray insertHistory(
             @RequestParam("previous_hash") String previous_hash,
             @RequestParam("block_hash") String block_hash,
             @RequestParam("block_timestamp") String block_timestamp,
@@ -155,16 +334,70 @@ public class Controller {
 
         historyService.insertHistory(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address);
 
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
+        response.put(res);
+        return response;
+
     }
 
 
     @RequestMapping(value = "/findhistoryadditionaldata", method = RequestMethod.GET)
-    public HistoryRepository.HistoryAdditionalData findAdditionalData(@RequestParam("block_hash") String block_hash) {
-        return historyService.findAdditionalData(block_hash);
+    public JSONArray findAdditionalData(@RequestParam("block_hash") String block_hash) {
+        HistoryRepository.HistoryAdditionalData historyAdditionalData = historyService.findAdditionalData(block_hash);
+
+        JSONArray response = new JSONArray();
+
+        if (historyAdditionalData==null){
+            response.put(false);
+        }else{
+            response.put(true);
+        }
+
+        JSONArray res = new JSONArray();
+        res.put(historyAdditionalData);
+        response.put(res);
+        return response;
     }
 
+    //checked
     @RequestMapping(value = "/findhistorymetainfo", method = RequestMethod.GET)
-    public HistoryRepository.HistoryMetaInfo findHistoryMetaInfo(@RequestParam("block_hash") String block_hash) {
-        return historyService.findMetaInfo(block_hash);
+    public JSONArray findHistoryMetaInfo(@RequestParam("block_hash") String block_hash) {
+        HistoryRepository.HistoryMetaInfo historyMetaInfo = historyService.findMetaInfo(block_hash);
+        JSONArray response = new JSONArray();
+
+        if (historyMetaInfo==null){
+            response.put(false);
+        }else{
+            response.put(true);
+        }
+
+        JSONArray res = new JSONArray();
+        res.put(historyMetaInfo);
+        response.put(res);
+        return response;
+    }
+
+    //checked
+    @RequestMapping(value = "/findmyvehicenumbers", method = RequestMethod.GET)
+    public JSONArray findMyVehicleNumbers(@RequestParam("current_owner") String current_owner) {
+        ArrayList<String> myVehicleList = vehicleService.getMyVehicleList(current_owner);
+
+        JSONArray response = new JSONArray();
+        JSONArray res = new JSONArray();
+
+        if (myVehicleList.size()>0){
+            response.put(true);
+            for (int i = 0; i < myVehicleList.size(); i++){
+                res.put(myVehicleList.get(i));
+            }
+        }else{
+            response.put(false);
+        }
+        response.put(res);
+        return response;
     }
 }

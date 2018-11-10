@@ -10,16 +10,16 @@ public class Identity {
 
     @Id
     private String block_hash;
-    private String public_key;
+    private String publicKey;
     private String role;
     private String name;
     private String location;
 
-//    public Identity(String block_hash, String public_key, String role, String name, String location){
+//    public Identity(String block_hash, String publicKey, String role, String name, String location){
 //        this.block_hash = block_hash;
 //        this.role = role;
 //        this.name = name;
-//        this.public_key = public_key;
+//        this.publicKey = publicKey;
 //        this.location = location;
 //    }
 
@@ -35,8 +35,8 @@ public class Identity {
         return name;
     }
 
-    public String getPublic_key() {
-        return public_key;
+    public String getpublicKey() {
+        return publicKey;
     }
 
     public String getLocation() {

@@ -11,6 +11,7 @@ public class HistoryServiceImpl implements HistoryService {
     HistoryRepository historyRepository;
     @Override
     public void insertHistory(String previous_hash, String block_hash, String block_timestamp, String block_number, String validity, String transaction_id, String sender, String event, String data, String address) {
+        System.out.println("came********************************");
         historyRepository.saveInHistory(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address);
 
     }

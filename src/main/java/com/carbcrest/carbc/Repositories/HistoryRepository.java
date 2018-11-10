@@ -15,7 +15,7 @@ public interface HistoryRepository  extends CrudRepository<BlockInfo, Integer> {
     @Transactional
     void saveInHistory(String previous_hash,String block_hash,String block_timestamp,String block_number,String validity,String transaction_id,String sender,String event,String data,String address);
 
-    @Query(value = "SELECT event, address FROM Blockchain WHERE block_hash = ?1 AND validity = 1", nativeQuery = true)
+    @Query(value = "SELECT event, address FROM Blockchain WHERE block_hash = ?1 AND validity = 0", nativeQuery = true)
     HistoryMetaInfo findHistoryData(String block_hash);
 
     public static interface HistoryMetaInfo{

@@ -10,19 +10,20 @@ import java.util.List;
 
 public interface BlockInfoRepository extends CrudRepository<BlockInfo, Integer> {
     @Modifying
-    @Query(value = "INSERT INTO Blockchain(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address)  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)", nativeQuery = true)
+    @Query(value = "INSERT INTO Blockchain(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address, rating)  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10, ?11)", nativeQuery = true)
     @Transactional
-    void saveInBlockchain(String previous_hash,String block_hash,String block_timestamp,String block_number,String validity,String transaction_id,String sender,String event,String data,String address);
+    void saveInBlockchain(String previous_hash,String block_hash,String block_timestamp,String block_number,String validity,String transaction_id,String sender,String event,String data,String address, String rating);
 
 
     @Query(value = "SELECT * FROM Blockchain WHERE block_number >= ?1 AND validity = 1", nativeQuery = true)
     List<BlockInfo> findByBlockNumber(int block_number);
 
-    @Query(value = "SELECT * FROM Blockchain WHERE transaction_id LIKE ?1 AND event = ?2 AND  address >= ?3  AND validity = 1", nativeQuery = true)
-    List<BlockInfo> findByMetaData(String transaction_id, String event,String address);
+//    @Query(value = "SELECT * FROM Blockchain WHERE transaction_id LIKE 'V%' AND validity = 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM Blockchain WHERE transaction_id LIKE 'V%' AND event = ?1 AND  address = ?2  AND validity = 1", nativeQuery = true)
+    List<BlockInfo> findByMetaData(String event, String address);
 
 
-    @Query (value = "SELECT block_hash,block_number, block_timestamp FROM Blockchain WHERE validity = 1 ORDER BY id DESC LIMIT 1",nativeQuery = true)
+    @Query (value = "SELECT block_hash, block_number, block_timestamp FROM Blockchain WHERE validity = 1 ORDER BY id DESC LIMIT 1",nativeQuery = true)
     BlockMetaInfo findMetaInfo();
 
     public static interface BlockMetaInfo{
@@ -48,11 +49,38 @@ public interface BlockInfoRepository extends CrudRepository<BlockInfo, Integer> 
         int getBlock_number();
     }
 
-    @Query (value = "SELECT block_hash FROM Blockchain WHERE validity = 1 ORDER BY id DESC LIMIT 1",nativeQuery = true)
-    PreviousHash findPreviousHash();
+    @Query (value = "SELECT * FROM Blockchain WHERE validity = 1 ORDER BY id DESC LIMIT 1",nativeQuery = true)
+    BlockInfo findPreviousHash();
 
     public static interface PreviousHash{
+
         String getPreviousHash();
     }
+
+    @Query (value = "SELECT data, address, rating, current_owner FROM `Blockchain` INNER JOIN `vehicle` ON Blockchain.address = " +
+            "vehicle.vehicle_id WHERE `validity` = 1 AND `event` = 'RegisterVehicle' AND " +
+            "vehicle.registration_number = ?1",nativeQuery = true)
+    RegisterData findRegisterData(String registration_number);
+
+    public static interface RegisterData{
+        String getData();
+        String getAddress();
+        String getRating();
+        String getCurrent_owner();
+    }
+
+    @Query (value = "SELECT `data`, `address`, `rating`, `current_owner`, `event` FROM `Blockchain` INNER JOIN `vehicle` " +
+            "ON Blockchain.address = vehicle.vehicle_id WHERE vehicle.registration_number = ?1 AND `event` NOT IN ('RegisterVehicle') " +
+            "AND `validity` = 1 ORDER BY `block_number` DESC",nativeQuery = true)
+    VehicleData findVehicleData(String registration_number);
+
+    public static interface VehicleData{
+        String getData();
+        String getAddress();
+        String getRating();
+        String getCurrent_owner();
+        String getEvent();
+    }
+
 
 }
