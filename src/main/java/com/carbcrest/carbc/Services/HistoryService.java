@@ -19,4 +19,6 @@ public interface HistoryService {
     public int checkExistence(String blockHash);
 
     public List<History> getAllHistory();
+
+    public void setStatus(String status, String blockHash);
 }

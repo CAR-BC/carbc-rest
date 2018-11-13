@@ -44,5 +44,10 @@ public interface HistoryRepository  extends CrudRepository<History, Integer> {
     @Query(value = "SELECT * FROM History", nativeQuery = true)
     List<History> getAllHistory();
 
+    @Query(value = "UPDATE `History` SET `status`= 1? WHERE `block_hash' = ?2", nativeQuery = true)
+    void setStatus(String status, String blockHash);
+
+
+
 
 }

@@ -46,4 +46,9 @@ public class HistoryServiceImpl implements HistoryService {
         List<History> peerDetailsList =  historyRepository.getAllHistory();
         return peerDetailsList;
     }
+
+    @Override
+    public void setStatus(String status, String blockHash) {
+        historyRepository.setStatus(status, blockHash);
+    }
 }

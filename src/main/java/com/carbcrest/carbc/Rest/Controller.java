@@ -552,4 +552,18 @@ public class Controller {
         response.put(res);
         return response;
     }
+
+    @RequestMapping(value = "/setstatushistory", method = RequestMethod.GET)
+    public JSONArray setStatusHistory(@RequestParam("status") String status,
+                                 @RequestParam("block_hash") String block_hash){
+        historyService.setStatus(status, block_hash);
+
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
+        response.put(res);
+        return response;
+    }
 }
