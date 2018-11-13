@@ -15,13 +15,13 @@ public class VehicleServiceImpl implements VehicleService{
 
 
     @Override
-    public ArrayList<String> getMyVehicleList(String current_owner) {
+    public List<Vehicle> getMyVehicleList(String current_owner) {
         List<Vehicle> myVehicleList = vehicleRepository.findMyVehicleList(current_owner);
-        ArrayList<String> vehicleList = new ArrayList<>();
-        for (int i = 0; i<myVehicleList.size() ;i++){
-            vehicleList.add(myVehicleList.get(i).getVehicle_id());
-        }
-        return vehicleList;
+//        ArrayList<String> vehicleList = new ArrayList<>();
+//        for (int i = 0; i<myVehicleList.size() ;i++){
+//            vehicleList.add(myVehicleList.get(i).getVehicle_id());
+//        }
+        return myVehicleList;
     }
 
     @Override

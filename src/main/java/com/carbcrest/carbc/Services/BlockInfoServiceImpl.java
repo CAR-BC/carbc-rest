@@ -37,6 +37,23 @@ public class BlockInfoServiceImpl implements BlockInfoService{
     }
 
     @Override
+    public ArrayList<String> checkPossibility(String pre_block_hash) {
+//        BlockInfoRepository.PreBlockData preBlockData = blockInfoRepository.checkPossibility(pre_block_hash);
+
+        ArrayList<String> p = blockInfoRepository.checkPossibility(pre_block_hash);
+//        System.out.println(preBlockData.getTimestamp1());
+//        System.out.println(preBlockData.getBlockHash1());
+//        return preBlockData;
+        return p;
+    }
+
+    @Override
+    public void setValidity(boolean validity, String blockHash) {
+        blockInfoRepository.setValidity(validity, blockHash);
+    }
+
+
+    @Override
     public List<BlockInfo> getBlockInfo(int block_number) {
         List<BlockInfo> blockInfos = blockInfoRepository.findByBlockNumber(block_number);
         return blockInfos;

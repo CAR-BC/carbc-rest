@@ -1,8 +1,6 @@
 package com.carbcrest.carbc.Rest;
 
-import com.carbcrest.carbc.Entities.BlockInfo;
-import com.carbcrest.carbc.Entities.Identity;
-import com.carbcrest.carbc.Entities.PeerDetails;
+import com.carbcrest.carbc.Entities.*;
 import com.carbcrest.carbc.Repositories.BlockInfoRepository;
 import com.carbcrest.carbc.Repositories.HistoryRepository;
 import com.carbcrest.carbc.Services.*;
@@ -53,13 +51,20 @@ public class Controller {
     public JSONArray findVehicleDetails(@RequestParam("event") String event, @RequestParam("address") String address) {
 
         JSONArray response = new JSONArray();
-        response.put(true);
+
 
         JSONArray res = new JSONArray();
         List<BlockInfo> a = blockInfoService.getVehicleDetails(event, address);
-        for (int i = 0; i < a.size(); i++){
-            res.put(a.get(i));
+
+        if (a.size() > 0){
+            response.put(true);
+            for (int i = 0; i < a.size(); i++){
+                res.put(a.get(i));
+            }
+        }else{
+            response.put(false);
         }
+
         response.put(res);
 
         return response;
@@ -230,7 +235,8 @@ public class Controller {
     }
 
     @RequestMapping(value = "/findidentitybyaddress", method = RequestMethod.GET)
-    public JSONArray findIdentityByAdsress(@RequestParam("address") String address) {
+    public JSONArray findIdentityByAddress(@RequestParam("address") String address) {
+        System.out.println("+++++++++++++++++++++++++++findidentitybyaddress");
         List<Identity> identityArray = identityService.getIdentityByAddress(address);
         JSONArray response = new JSONArray();
         JSONArray res = new JSONArray();
@@ -407,16 +413,43 @@ public class Controller {
         return response;
     }
 
-    //checked
-    @RequestMapping(value = "/findmyvehiclenumbers", method = RequestMethod.GET)
-    public JSONArray findMyVehicleNumbers(@RequestParam("current_owner") String current_owner) {
-        ArrayList<String> myVehicleList = vehicleService.getMyVehicleList(current_owner);
+    @RequestMapping(value = "/findallhistory", method = RequestMethod.GET)
+    public JSONArray findAllHistory() {
+
+        List<History> allHistory = historyService.getAllHistory();
+
+//        System.out.println(allHistory);
 
         JSONArray response = new JSONArray();
         JSONArray res = new JSONArray();
-        for(String s: myVehicleList) {
-            System.out.println(s);
+
+        if (allHistory.size()>0){
+            response.put(true);
+            for (int i = 0; i < allHistory.size(); i++){
+                res.put(allHistory.get(i));
+                System.out.println(allHistory.get(i).getAddress());
+                System.out.println(allHistory.get(i).isValidity());
+            }
+        }else{
+            response.put(false);
         }
+        response.put(res);
+
+        return response;
+
+    }
+
+
+    //checked
+    @RequestMapping(value = "/findmyvehiclenumbers", method = RequestMethod.GET)
+    public JSONArray findMyVehicleNumbers(@RequestParam("current_owner") String current_owner) {
+        List<Vehicle> myVehicleList = vehicleService.getMyVehicleList(current_owner);
+
+        JSONArray response = new JSONArray();
+        JSONArray res = new JSONArray();
+//        for(String s: myVehicleList) {
+//            System.out.println(s);
+//        }
 
         if (myVehicleList.size()>0){
             response.put(true);
@@ -483,6 +516,39 @@ public class Controller {
 
         JSONArray res = new JSONArray();
         res.put(existenceInfo);
+        response.put(res);
+        return response;
+    }
+
+    @RequestMapping(value = "/checkpossibility", method = RequestMethod.GET)
+    public JSONArray checkPossibility(@RequestParam("pre_block_hash") String pre_block_hash){
+        System.out.println(pre_block_hash);
+        ArrayList<String> preBlockData = blockInfoService.checkPossibility(pre_block_hash);
+
+
+        System.out.println(preBlockData.size());
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        for (int i = 0; i < preBlockData.size(); i++){
+            res.put(preBlockData.get(i));
+        }
+
+        response.put(res);
+        return response;
+    }
+
+    @RequestMapping(value = "/setvalidityinblockchain", method = RequestMethod.GET)
+    public JSONArray setValidity(@RequestParam("validity") boolean validity,
+                                 @RequestParam("block_hash") String block_hash){
+        blockInfoService.setValidity(validity, block_hash);
+
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
         response.put(res);
         return response;
     }

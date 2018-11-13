@@ -1,16 +1,15 @@
 package com.carbcrest.carbc.Entities;
 
-import javax.persistence.Id;
-
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 
 @Entity
-public class BlockInfo {
+public class History {
 
     //details from blockheader
     @Id
+    private int id;
     private String previous_hash;
     private String block_hash;
     private Timestamp block_timestamp;
@@ -23,6 +22,7 @@ public class BlockInfo {
     private String event;
     private String data;
     private String address;
+    private String additional_data;
 
 //    public BlockInfo(String previous_hash, String block_hash, Timestamp block_timestamp, long block_number, boolean validity, String transaction_id, String sender, String event, String data, String address) {
 //        this.previous_hash = previous_hash;
@@ -116,4 +116,21 @@ public class BlockInfo {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getAdditional_data() {
+        return additional_data;
+    }
+
+    public void setAdditional_data(String additional_data) {
+        this.additional_data = additional_data;
+    }
 }
+

@@ -1,8 +1,13 @@
 package com.carbcrest.carbc.Services;
 
+import com.carbcrest.carbc.Entities.BlockInfo;
+import com.carbcrest.carbc.Entities.History;
 import com.carbcrest.carbc.Repositories.HistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class HistoryServiceImpl implements HistoryService {
@@ -34,5 +39,11 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public int checkExistence(String blockHash) {
         return historyRepository.checkExistence(blockHash);
+    }
+
+    @Override
+    public List<History> getAllHistory() {
+        List<History> peerDetailsList =  historyRepository.getAllHistory();
+        return peerDetailsList;
     }
 }

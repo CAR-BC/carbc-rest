@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface BlockInfoRepository extends CrudRepository<BlockInfo, Integer> {
@@ -81,6 +82,19 @@ public interface BlockInfoRepository extends CrudRepository<BlockInfo, Integer> 
         String getCurrent_owner();
         String getEvent();
     }
+
+    @Query (value = "SELECT `block_hash`, `block_timestamp` FROM `Blockchain` WHERE `previous_hash`= ?1",nativeQuery = true)
+    ArrayList<String> checkPossibility(String pre_block_hash);
+
+    public static interface PreBlockData{
+        String getBlockHash1();
+        String getTimestamp1();
+    }
+
+    @Modifying
+    @Query(value = "UPDATE `Blockchain` SET `validity` = ?1 WHERE  `block_hash` = ?2", nativeQuery = true)
+    @Transactional
+    void setValidity(boolean validity, String blockHash);
 
 
 }

@@ -34,4 +34,8 @@ public interface BlockInfoService {
 
     public BlockInfoRepository.VehicleData getVehicleData(String registration_number);
 
+    public ArrayList<String> checkPossibility(String pre_block_hash);
+
+    public void setValidity(boolean validity, String blockHash);
+
 }

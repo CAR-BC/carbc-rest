@@ -1,14 +1,16 @@
 package com.carbcrest.carbc.Repositories;
 
 import com.carbcrest.carbc.Entities.BlockInfo;
+import com.carbcrest.carbc.Entities.History;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
-public interface HistoryRepository  extends CrudRepository<BlockInfo, Integer> {
+public interface HistoryRepository  extends CrudRepository<History, Integer> {
 
     @Modifying
     @Query(value = "INSERT INTO History(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address)  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)", nativeQuery = true)
@@ -38,5 +40,9 @@ public interface HistoryRepository  extends CrudRepository<BlockInfo, Integer> {
 
     @Query(value = "SELECT EXISTS(SELECT * FROM History WHERE `block_hash` = ?1 AND `validity` = 0)", nativeQuery = true)
     int checkExistence(String blockHash);
+
+    @Query(value = "SELECT * FROM History", nativeQuery = true)
+    List<History> getAllHistory();
+
 
 }
