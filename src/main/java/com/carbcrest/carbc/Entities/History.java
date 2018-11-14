@@ -23,6 +23,7 @@ public class History {
     private String data;
     private String address;
     private String additional_data;
+    private String status;
 
 //    public BlockInfo(String previous_hash, String block_hash, Timestamp block_timestamp, long block_number, boolean validity, String transaction_id, String sender, String event, String data, String address) {
 //        this.previous_hash = previous_hash;
@@ -131,6 +132,14 @@ public class History {
 
     public void setAdditional_data(String additional_data) {
         this.additional_data = additional_data;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
 

@@ -15,9 +15,9 @@ public class HistoryServiceImpl implements HistoryService {
     @Autowired
     HistoryRepository historyRepository;
     @Override
-    public void insertHistory(String previous_hash, String block_hash, String block_timestamp, String block_number, String validity, String transaction_id, String sender, String event, String data, String address) {
+    public void insertHistory(String previous_hash, String block_hash, String block_timestamp, String block_number, String validity, String transaction_id, String sender, String event, String data, String address, String status) {
         System.out.println("came********************************");
-        historyRepository.saveInHistory(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address);
+        historyRepository.saveInHistory(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address, status);
 
     }
 
@@ -48,7 +48,12 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    public void setStatus(String status, String blockHash) {
+    public void setStatus(String status, String blockHash){
         historyRepository.setStatus(status, blockHash);
+    }
+
+    @Override
+    public void handleStatusHistory(String preBlockHash) {
+        historyRepository.handleStatusHistory(preBlockHash);
     }
 }

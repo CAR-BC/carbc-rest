@@ -160,8 +160,10 @@ public class Controller {
         JSONArray response = new JSONArray();
 
         if (vehicleData==null){
+            System.out.println("vehicle data null");
             response.put(false);
         }else{
+            System.out.println("vehicle data not null");
             response.put(true);
         }
 
@@ -362,9 +364,10 @@ public class Controller {
             @RequestParam("sender") String sender,
             @RequestParam("event") String event,
             @RequestParam("data") String data,
-            @RequestParam("address") String address) {
+            @RequestParam("address") String address,
+            @RequestParam("status") String status){
 
-        historyService.insertHistory(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address);
+        historyService.insertHistory(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address, status);
 
         JSONArray response = new JSONArray();
         response.put(true);
@@ -563,6 +566,32 @@ public class Controller {
 
         JSONArray res = new JSONArray();
         res.put("succeed");
+        response.put(res);
+        return response;
+    }
+
+    @RequestMapping(value = "/handlestatushistory", method = RequestMethod.GET)
+        public JSONArray handleStatusHistory(@RequestParam("pre_block_hash") String pre_block_hash){
+        historyService.handleStatusHistory(pre_block_hash);
+
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
+        response.put(res);
+        return response;
+    }
+
+    @RequestMapping(value = "/searchvehiclebyregistrationNumber", method = RequestMethod.GET)
+        public JSONArray searchVehicleByRegistrationNumber(@RequestParam("registration_number") String registration_number){
+        int noOfVehicle = vehicleService.searchVehicleByRegistrationNumber(registration_number);
+
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put(noOfVehicle);
         response.put(res);
         return response;
     }

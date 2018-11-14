@@ -24,6 +24,9 @@ public interface VehicleRepository extends CrudRepository<Vehicle, Integer> {
     @Transactional
     void updateVehicleTable(String currentOwner, String vehicleId);
 
+    @Query(value = "SELECT COUNT(*) FROM `vehicle` WHERE registration_number = ?1", nativeQuery = true)
+    int searchVehicleByRegNo(String registration_nunber);
+
 
 
 }
