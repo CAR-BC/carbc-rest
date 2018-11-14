@@ -45,4 +45,13 @@ public class IdentityServiceImpl implements IdentityService {
         }
         return identities.get(0);
     }
+
+    @Override
+    public List<Identity> getServiceStation() {
+        List<Identity> identities = identityRepository.getServiceStations();
+        if (identities.size()<1){
+            return null;
+        }
+        return identities;
+    }
 }

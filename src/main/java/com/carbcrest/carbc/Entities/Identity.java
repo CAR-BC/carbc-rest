@@ -14,6 +14,8 @@ public class Identity {
     private String role;
     private String name;
     private String location;
+    private String latitude;
+    private String longitude;
 
 //    public Identity(String block_hash, String publicKey, String role, String name, String location){
 //        this.block_hash = block_hash;
@@ -41,5 +43,21 @@ public class Identity {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }

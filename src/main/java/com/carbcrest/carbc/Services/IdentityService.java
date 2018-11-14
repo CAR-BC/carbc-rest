@@ -9,5 +9,6 @@ public interface IdentityService {
     public Identity getIdentity(String publicKey);
     public List<Identity> getIdentityByAddress(String location);
     public Identity getIdentityByRole(String role);
+    public List<Identity> getServiceStation();
 
 }

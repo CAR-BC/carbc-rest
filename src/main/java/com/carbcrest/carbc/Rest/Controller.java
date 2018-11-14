@@ -498,6 +498,7 @@ public class Controller {
 
     @RequestMapping(value = "/setvalidity", method = RequestMethod.GET)
     public JSONArray setValidity(@RequestParam("block_hash") String block_hash){
+        System.out.println("inside setValidity");
         historyService.setValidity(block_hash);
 
         JSONArray response = new JSONArray();
@@ -595,4 +596,26 @@ public class Controller {
         response.put(res);
         return response;
     }
+
+    @RequestMapping(value = "/getservicestations", method = RequestMethod.GET)
+    public JSONArray getServiceStations(){
+        List<Identity> identityArray = identityService.getServiceStation();
+        JSONArray response = new JSONArray();
+        JSONArray res = new JSONArray();
+
+        if (identityArray.size()>0){
+            response.put(true);
+        }else{
+            response.put(false);
+        }
+
+        for (int i = 0; i < identityArray.size(); i++){
+            res.put(identityArray.get(i));
+        }
+        response.put(res);
+
+        return response;
+    }
+
+
 }

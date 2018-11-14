@@ -36,7 +36,7 @@ public interface HistoryRepository  extends CrudRepository<History, Integer> {
     }
 
     @Modifying
-    @Query(value = "UPDATE `History` SET `validity` = 1 WHERE `block_hash` = ?1", nativeQuery = true)
+    @Query(value = "UPDATE `History` SET `validity` = 1, `status` = 'Accepted' WHERE `block_hash` = ?1", nativeQuery = true)
     @Transactional
     void setValidity(String blockHash);
 
