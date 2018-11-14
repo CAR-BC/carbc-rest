@@ -13,4 +13,6 @@ public interface VehicleService {
     public void updateVehicleTable(String vehicleId, String currentOwner);
 
     public int searchVehicleByRegistrationNumber(String regNo);
+
+    public String getVehicleOwnerByRegistrationNumber(String regNo);
 }

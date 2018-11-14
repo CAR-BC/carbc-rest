@@ -597,6 +597,24 @@ public class Controller {
         return response;
     }
 
+    @RequestMapping(value = "/getvehicleownerbyregistrationNumber", method = RequestMethod.GET)
+    public JSONArray getVehicleOwnerByRegistrationNumber(@RequestParam("registration_number") String registration_number){
+        String vehicleOwner = vehicleService.getVehicleOwnerByRegistrationNumber(registration_number);
+
+        JSONArray response = new JSONArray();
+
+        if (vehicleOwner == null){
+            response.put(false);
+        }else {
+            response.put(true);
+        }
+
+        JSONArray res = new JSONArray();
+        res.put(vehicleOwner);
+        response.put(res);
+        return response;
+    }
+
     @RequestMapping(value = "/getservicestations", method = RequestMethod.GET)
     public JSONArray getServiceStations(){
         List<Identity> identityArray = identityService.getServiceStation();

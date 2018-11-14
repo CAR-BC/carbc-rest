@@ -39,4 +39,9 @@ public class VehicleServiceImpl implements VehicleService{
         return vehicleRepository.searchVehicleByRegNo(regNo);
     }
 
+    @Override
+    public String getVehicleOwnerByRegistrationNumber(String regNo) {
+        return vehicleRepository.getVehicleOwnerByRegNo(regNo);
+    }
+
 }
