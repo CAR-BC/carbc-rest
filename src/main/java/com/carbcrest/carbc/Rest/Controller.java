@@ -597,7 +597,7 @@ public class Controller {
         return response;
     }
 
-    @RequestMapping(value = "/getvehicleownerbyregistrationNumber", method = RequestMethod.GET)
+    @RequestMapping(value = "/getvehicleownerbyregistrationnumber", method = RequestMethod.GET)
     public JSONArray getVehicleOwnerByRegistrationNumber(@RequestParam("registration_number") String registration_number){
         String vehicleOwner = vehicleService.getVehicleOwnerByRegistrationNumber(registration_number);
 
