@@ -56,4 +56,9 @@ public class HistoryServiceImpl implements HistoryService {
     public void handleStatusHistory(String preBlockHash) {
         historyRepository.handleStatusHistory(preBlockHash);
     }
+
+    @Override
+    public HistoryRepository.ResendHistory getHistoryDataToResendBlock(String block_hash) {
+        return historyRepository.historyDataToResendBlock(block_hash);
+    }
 }

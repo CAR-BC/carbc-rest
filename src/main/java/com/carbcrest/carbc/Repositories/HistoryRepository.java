@@ -57,6 +57,16 @@ public interface HistoryRepository  extends CrudRepository<History, Integer> {
     @Transactional
     void handleStatusHistory(String preBlockHash);
 
+    @Query(value = "SELECT `event`, `data`, `address`, `additional_data` FROM `History` WHERE `block_hash` = ?1", nativeQuery = true)
+    ResendHistory historyDataToResendBlock(String block_hash);
+
+    public static interface ResendHistory{
+        String getEvent();
+        String getData();
+        String getAddress();
+        String getAdditional_data();
+    }
+
 
 
 

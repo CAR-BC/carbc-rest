@@ -635,5 +635,24 @@ public class Controller {
         return response;
     }
 
+    @RequestMapping(value = "/historydatatoresendblock", method = RequestMethod.GET)
+    public JSONArray historyDataToResendBlock(@RequestParam("block_hash") String block_hash){
+        HistoryRepository.ResendHistory resendHistory = historyService.getHistoryDataToResendBlock(block_hash);
+        JSONArray response = new JSONArray();
+
+        if (resendHistory==null){
+            response.put(false);
+        }else{
+            response.put(true);
+        }
+
+        JSONArray res = new JSONArray();
+        res.put(resendHistory);
+        response.put(res);
+        return response;
+
+    }
+
+
 
 }

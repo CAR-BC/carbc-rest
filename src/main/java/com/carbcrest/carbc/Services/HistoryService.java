@@ -25,4 +25,6 @@ public interface HistoryService {
     public void setStatus(String status, String blockHash);
 
     public void handleStatusHistory(String preBlockHash);
+
+    public HistoryRepository.ResendHistory getHistoryDataToResendBlock(String block_hash);
 }
