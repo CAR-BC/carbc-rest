@@ -44,7 +44,7 @@ public interface HistoryRepository  extends CrudRepository<History, Integer> {
     @Query(value = "SELECT EXISTS(SELECT * FROM History WHERE `block_hash` = ?1 AND `validity` = 0)", nativeQuery = true)
     int checkExistence(String blockHash);
 
-    @Query(value = "SELECT * FROM History", nativeQuery = true)
+    @Query(value = "SELECT * FROM History ORDER BY `block_timestamp` DESC", nativeQuery = true)
     List<History> getAllHistory();
 
     @Modifying
