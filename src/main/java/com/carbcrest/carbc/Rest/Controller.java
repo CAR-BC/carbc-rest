@@ -167,4 +167,6 @@ public class Controller {
     public HistoryRepository.HistoryMetaInfo findHistoryMetaInfo(@RequestParam("block_hash") String block_hash) {
         return historyService.findMetaInfo(block_hash);
     }
+
 }
+
