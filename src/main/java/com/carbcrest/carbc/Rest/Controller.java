@@ -653,6 +653,19 @@ public class Controller {
 
     }
 
+    @RequestMapping(value = "/deleteRecord", method = RequestMethod.GET)
+    public JSONArray setStatusHistory(@RequestParam("block_hash") String block_hash){
+        historyService.deleteRecord( block_hash);
+
+        JSONArray response = new JSONArray();
+        response.put(true);
+
+        JSONArray res = new JSONArray();
+        res.put("succeed");
+        response.put(res);
+        return response;
+    }
+
 
 
 }

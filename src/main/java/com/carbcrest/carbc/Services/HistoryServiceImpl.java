@@ -61,4 +61,9 @@ public class HistoryServiceImpl implements HistoryService {
     public HistoryRepository.ResendHistory getHistoryDataToResendBlock(String block_hash) {
         return historyRepository.historyDataToResendBlock(block_hash);
     }
+
+    @Override
+    public void deleteRecord(String blockHash) {
+        historyRepository.deleteRecord(blockHash);
+    }
 }

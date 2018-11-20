@@ -67,7 +67,9 @@ public interface HistoryRepository  extends CrudRepository<History, Integer> {
         String getAdditional_data();
     }
 
-
-
+    @Modifying
+    @Query(value = "DELETE FROM `History` WHERE `block_hash` = ?1", nativeQuery = true)
+    @Transactional
+    void deleteRecord( String blockHash);
 
 }
