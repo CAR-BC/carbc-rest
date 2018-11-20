@@ -12,6 +12,7 @@ public interface PeerDetailsRepository extends CrudRepository<PeerDetails, Integ
 
 
     @Modifying
+
     @Query(value = "INSERT INTO PeerDetails(node_id,ip, port, public_key)  VALUES (?1,?2,?3,?4)", nativeQuery = true)
     @Transactional
     void saveInPeerDetails(String node_id, String ip,String port,String public_key);

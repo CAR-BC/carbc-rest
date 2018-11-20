@@ -2,9 +2,12 @@ package com.carbcrest.carbc.Services;
 
 import com.carbcrest.carbc.Entities.BlockInfo;
 import com.carbcrest.carbc.Repositories.BlockInfoRepository;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,10 +17,41 @@ public class BlockInfoServiceImpl implements BlockInfoService{
     BlockInfoRepository blockInfoRepository;
 
     @Override
-    public void insertBlockInfo(String previous_hash, String block_hash, String block_timestamp, String block_number, String validity, String transaction_id, String sender, String event, String data, String address) {
-        blockInfoRepository.saveInBlockchain(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender, event, data, address);
+    public void insertBlockInfo(String previous_hash, String block_hash, String block_timestamp, String block_number,
+                                String validity, String transaction_id, String sender, String event, String data, String address, String rating) {
+        blockInfoRepository.saveInBlockchain(previous_hash, block_hash, block_timestamp, block_number, validity, transaction_id, sender,
+                event, data, address, rating);
         return;
     }
+
+    @Override
+    public BlockInfoRepository.RegisterData getRegistrationData(String registration_number) {
+        BlockInfoRepository.RegisterData registerData = blockInfoRepository.findRegisterData(registration_number);
+        return registerData;
+    }
+
+    @Override
+    public BlockInfoRepository.VehicleData getVehicleData(String registration_number) {
+        BlockInfoRepository.VehicleData vehicleData = blockInfoRepository.findVehicleData(registration_number);
+        return vehicleData;
+    }
+
+    @Override
+    public ArrayList<String> checkPossibility(String pre_block_hash) {
+//        BlockInfoRepository.PreBlockData preBlockData = blockInfoRepository.checkPossibility(pre_block_hash);
+
+        ArrayList<String> p = blockInfoRepository.checkPossibility(pre_block_hash);
+//        System.out.println(preBlockData.getTimestamp1());
+//        System.out.println(preBlockData.getBlockHash1());
+//        return preBlockData;
+        return p;
+    }
+
+    @Override
+    public void setValidity(boolean validity, String blockHash) {
+        blockInfoRepository.setValidity(validity, blockHash);
+    }
+
 
     @Override
     public List<BlockInfo> getBlockInfo(int block_number) {
@@ -26,8 +60,8 @@ public class BlockInfoServiceImpl implements BlockInfoService{
     }
 
     @Override
-    public List<BlockInfo> getVehicleDetails(String transaction_id, String event, String address) {
-        List<BlockInfo> blockInfos = blockInfoRepository.findByMetaData(transaction_id, event, address);
+    public List<BlockInfo> getVehicleDetails(String event, String address) {
+        List<BlockInfo> blockInfos = blockInfoRepository.findByMetaData(event, address);
         return blockInfos;
     }
 
@@ -39,8 +73,8 @@ public class BlockInfoServiceImpl implements BlockInfoService{
     }
 
     @Override
-    public BlockInfoRepository.PreviousHash getPreviousHash() {
-        BlockInfoRepository.PreviousHash previousHash = blockInfoRepository.findPreviousHash();
+    public String getPreviousHash() {
+        String previousHash = blockInfoRepository.findPreviousHash().getBlock_hash();
         return previousHash;
     }
 

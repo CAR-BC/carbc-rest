@@ -27,4 +27,8 @@ public interface IdentityRepository extends CrudRepository<Identity, Integer> {
     @Query(value = "SELECT * FROM Identity WHERE role= ?1", nativeQuery = true)
     List<Identity> findByRole(String address);
 
+    @Query(value = "SELECT `block_hash`, `public_key`, `role`, `name`, `location`, `longitude`, `latitude` FROM `Identity` WHERE `role` = 'ServiceStation'", nativeQuery = true)
+    List<Identity> getServiceStations();
+
+
 }
